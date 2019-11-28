@@ -15,9 +15,8 @@ print K.image_dim_ordering()
 '''
 
 window_size = 512
-#work_dir = "/media/ironman2/2230FAE530FABF3B/FreeSFx"
-work_dir = "/media/ironman2/2230FAE530FABF3B/UrbanSound8K/audio"
-classes=['air condition','car horn','children playing','dog bark','drilling','engine idling','gun_shot','jack hammer','siren','street music']
+work_dir = "./Dataset"
+classes=['Alarm','Drilling']
 
 ## This for mel spectogram resolution
 n_bands = 60
@@ -51,12 +50,14 @@ def extract_features():
         
 
         for fs in os.listdir(work_dir + "/" + sub_dir):
+	    print('fs',fs,work_dir + "/" + sub_dir + "/" + fs)
             if ".wav" not in fs: continue
             print("Loading file: ", fs)
             sound_clip, sr = librosa.load(work_dir + "/" + sub_dir + "/" + fs)
+            print(work_dir + "/" + sub_dir + "/" + fs)
             print('Sound clip.shape and sampling rate:',sound_clip,sr)
-            label = fs.split('-')[1]
-            print(cnt, "Try Loading file: ", fs, " class: ", label)
+            #label = fs.split('-')[1]
+            #print(cnt, "Try Loading file: ", fs, " class: ", label)
             cnt += 1
             
             ## Work of file bacthes
@@ -75,7 +76,7 @@ def extract_features():
                     print(mfcc_spec.shape)
                     raw_features.append(mfcc_spec)
                     print('over')
-                    _labels.append(label)
+                    #_labels.append(label)
                     
                     
     print("Loaded ", cnt, " files")
@@ -99,61 +100,18 @@ def extract_features():
 
     print('features shape final', _features.shape)
 
-    plt.imshow(_features[10, :, :, 0])
+    plt.imshow(_features[1, :, :, 0])
     plt.show()
-    plt.imshow(_features[10, :, :, 1])
+    plt.imshow(_features[1, :, :, 1])
     plt.show()
-    plt.imshow(_features[10, :, :, 2])
+    plt.imshow(_features[1, :, :, 2])
     plt.show()
 
-    return np.array(_features), np.array(_labels, dtype=np.int)
+    return np.array(_features)
 ## END extract_features
 
 
 
 
 
-features,labels = extract_features()
-
-print(labels[10])
-print(labels[20])
-#print(features[10])
-#print(features[20])
-
-'''
-
-fd = open("../S2L2.0_storage/data_x_freesfxx_mfcc.pkl", 'wb')
-pickle.dump(features, fd)
-fd2 = open("../S2L2.0_storage/data_y_freesfxx_mfcc.pkl", 'wb')
-pickle.dump(labels, fd2)
-
-df=h5py.File('../S2L2.0_storage/data_freesfxx_mfcc.h5','w')
-df.create_dataset('features',data=features)
-df.create_dataset('labels',data=labels)
-
-
-
-print('features and values saved...!!')
-
-'''
-print(labels[10])
-print(labels[20])
-print(features[10])
-print(features[20])
-
-fd = open("../S2L2.0_storage/data_x_urbansound8k_mfcc.pkl", 'wb')
-pickle.dump(features, fd)
-print('features saved...!!')
-
-fd2 = open("../S2L2.0_storage/data_y_urbansound8k_mfcc.pkl", 'wb')
-pickle.dump(labels, fd2)
-print('labels saved...!!')
-
-'''
-df=h5py.File('../S2L2.0_storage/audio_data_train_mfcc.h5','w')
-df.create_dataset('features',data=features)
-df.create_dataset('labels',data=labels)
-'''
-
-
-print('features and values saved...!!')
+features = extract_features()
