@@ -103,6 +103,9 @@ print('A with D:',avg_distance(mfcc_spec_A,mfcc_spec_D))
 print('D with A:',avg_distance(mfcc_spec_D,mfcc_spec_A))
 
 
+print('END')
+
+
 
 
 
